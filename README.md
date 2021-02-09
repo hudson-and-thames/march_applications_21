@@ -28,6 +28,7 @@ In a Jupyter Notebook (python):
 1. Make a Pull Request to this repo so that we can evaluate your work. (Create a new folder with your name)
 1. Bonus points if you add unit tests (in a separate .py file).
 1. Provide a writeup explaining your way-of-work, your design choices, maybe a UML digram, and learnings.
+1. Deadline: 17th of February 2021  
 
 ### How Will You be Evaluated?
 
