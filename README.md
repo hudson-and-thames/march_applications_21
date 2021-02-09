@@ -5,17 +5,13 @@
 Our previous cohort built the foundations of the [ArbitrageLab](https://hudsonthames.org/arbitragelab/) python library. You will continue to build on their success
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/hudson-and-thames/march_applications_21/main/images/arbitragelab_logo.png" height="300"><br>
+  <img src="https://raw.githubusercontent.com/hudson-and-thames/march_applications_21/main/images/arbitragelab_logo.png" height="250"><br>
 </div>        
 
 ## Your Mission:
 The following assignment is an opportunity for you to highlight your skillset and show us what you are made of! It tests your ability to implement academic research for the broader quantitative finance community, and to do it in style!
 
 ### Briefing
-
-<div align="center">
-  <img src="https://hudsonthames.org/wp-content/uploads/2020/09/Pairs-Selection-1.jpg" height="300"><br>
-</div>  
 
 Read the following paper: [Statistical Arbitrage with Vine Copulas](https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf). 
 
@@ -24,7 +20,7 @@ Note: The paper covers a trading strategy regarding Vine Copulas, don't be intim
 In a Jupyter Notebook (python):
 
 1. Download and save your universe of stocks (S&P500 constituents) (Can use Yahoo finance to get shares data. Checkout the [yfinance](https://github.com/ranaroussi/yfinance) package.)(Else you can use [Polygon](https://polygon.io/))
-1. Implement Section 3.1.1: Partner selection (At least 3 of the 4 procedures).
+1. Implement Section 3.1.1: Partner selection (At least 3 of the 4 procedures). This set of algorithms has important applications for the Vine Copula module in ArbitrageLab.
 1. Create a set of functions/class for the end-user to make use of.
 1. Make sure to add docstrings and follow PEP8 code style checks. Have plenty of inline comments, good variable names and don't over complicate things unnecessarily. It should be easy for the user to make use of.
 1. Showcase your new Partner Selection Framework in a Jupyter Notebook and show us some visualizations of the Qudruples.
