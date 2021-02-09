@@ -23,7 +23,7 @@ In a Jupyter Notebook (python):
 1. Implement Section 3.1.1: Partner selection (At least 3 of the 4 procedures, impress us with all 4). This set of algorithms has important applications for the Vine Copula module in ArbitrageLab.
 1. Create a set of functions/class for the end-user to make use of.
 1. Make sure to add docstrings and follow PEP8 code style checks. Have plenty of inline comments, good variable names and don't over complicate things unnecessarily. It should be easy for the user to make use of.
-1. Showcase your new Partner Selection Framework in a Jupyter Notebook and show us some visualizations of the Qudruples.
+1. Showcase your new Partner Selection Framework in a Jupyter Notebook and show us some great visualizations (Matplotlib is a bit basic).
 1. Add an introduction, body, and conclusion showcasing your new implementation. (Use the correct style headers)
 1. Make a Pull Request to this repo so that we can evaluate your work. (Create a new folder with your name)
 1. Bonus points if you add unit tests (in a separate .py file).
@@ -41,6 +41,7 @@ The one consistent theme between all of our top researchers is their ability to 
 * Your code for the implementation should be contained in a .py file that you import into your notebook. Please don't have large chunks of code in your notebook.
 * IDE Choice: Pycharm, NOT Spyder.
 * Save your data with your PR so that we can evaluate it.
+* Turn to the previous cohort's [submissions](https://github.com/hudson-and-thames/oct_applications) for inspiration.
 
 ## Institutional - Need to Know
 
