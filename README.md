@@ -1,13 +1,11 @@
+# Skill Set Challenge!
+
+Our previous cohort built the foundations of the [ArbitrageLab](https://hudsonthames.org/arbitragelab/) python library. You will continue to build on their success
+
 <div align="center">
   <img src="https://raw.githubusercontent.com/hudson-and-thames/march_applications_21/main/images/arbitragelab_logo.png" height="300"><br>
-</div>                                                                                                                                               
+</div>        
 
-
-<p style="text-align: center; Our previous cohort built the foundations of the [ArbitrageLab](https://hudsonthames.org/arbitragelab/) python library. You will continue to build on their success!>
-
-
-
-# Skill Set Challenge!
 [Hudson & Thames](https://hudsonthames.org/) has provided the following skillset challenge to allow potential researchers to gauge if they have the required skills to take part in the [apprenticeship program](https://hudsonthames.org/apprenticeship-program/).
 
 ## Your Mission:
