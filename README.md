@@ -44,6 +44,10 @@ The one consistent theme between all of our top researchers is their ability to 
 
 ## Institutional - Need to Know
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/hudson-and-thames/mlfinlab/master/docs/source/logo/Hudson%20%26%20Thames_verticalblack.png" height="150"><br>
+</div>
+
 **Our Mission**
 
 Our mission is to promote the scientific method within investment management by codifying frameworks, algorithms, and best practices to build the world’s first central repository of ready to use implementations and intellectual property.
@@ -53,10 +57,6 @@ Our mission is to promote the scientific method within investment management by 
 * **Locked Achievement**: Researcher
 * **Location**: Virtual Team (We are all in different time zones across the world.)
 * **Education**: Familiarity with computer science, statistics, and applied maths. We care a lot more about what you can do rather than your exact qualifications.
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/hudson-and-thames/mlfinlab/master/docs/source/logo/Hudson%20%26%20Thames_verticalblack.png" height="150"><br>
-</div>
 
 ### Day on Day Activity
 * Implement academic research
