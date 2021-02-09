@@ -2,12 +2,12 @@
   <img src="https://raw.githubusercontent.com/hudson-and-thames/march_applications_21/main/images/arbitragelab_logo.png" height="300"><br>
 </div>                                                                                                                                               
 
+Our previous cohort built the foundations of the [ArbitrageLab](https://hudsonthames.org/arbitragelab/) python library. You will continue to build on their success!
+
 # Skill Set Challenge!
 [Hudson & Thames](https://hudsonthames.org/) has provided the following skillset challenge to allow potential researchers to gauge if they have the required skills to take part in the [apprenticeship program](https://hudsonthames.org/apprenticeship-program/).
 
 ## Your Mission:
-Our previous cohort built the foundations of the [ArbitrageLab](https://hudsonthames.org/arbitragelab/) python library. You will continue to build on their success!
-
 The following assignment is an opportunity for you to highlight your skillset and show us what you are made of! It tests your ability to implement academic research for the broader quantitative finance community, and to do it in style!
 
 ### Briefing
