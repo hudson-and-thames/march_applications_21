@@ -1,6 +1,6 @@
 # Guide for the Extended Approach
 
-Schmid and Schmidt (2007) introduced the generalized Spearman's $`\rho`$ to directly model high dimensional associations among random variables instead of approximating from pairwise measures. This paper is a great example on conducting rigorous statistical research with proofs from first principle, and it aided our development in understanding intrinsically what copula methods ask for pairs selection.
+Schmid and Schmidt (2007) introduced the generalized Spearman's $'\rho'$ to directly model high dimensional associations among random variables instead of approximating from pairwise measures. This paper is a great example on conducting rigorous statistical research with proofs from first principle, and it aided our development in understanding intrinsically what copula methods ask for pairs selection.
 
 However, it's quite some technical material to go over and understand thoroughly in a short time. Therefore for this skillset challenge we provide further guidance for you by summing up the key parts you need to know.
 
