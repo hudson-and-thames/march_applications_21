@@ -4,6 +4,10 @@ Schmid and Schmidt (2007) introduced the generalized Spearman's $\rho$ to direct
 
 However, it's quite some technical material to go over and understand thoroughly in a short time. Therefore for this skillset challenge we provide further guidance for you by summing up the key parts you need to know.
 
+```math
+\rho
+```
+
 ## What is in the paper?
 
 Spearman's $\rho$ is a nonparametric rank statistic. All the calculation is done using rank data, instead of real values and hence it is distribution free. This quantity is key for selecting pairs for copula-based statistical arbitrage strategies. Kendall's $\tau$ is another commonly used quantity that has similar properties. But the original formula only works for 2 random variables.
