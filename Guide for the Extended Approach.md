@@ -45,7 +45,7 @@ Note this quantity is in $[0, 1]$. And you should use ECDF to calculate it.
    
    $$
    \hat{\rho}_3 = -3 + \frac{12}{n {d \choose 2}} \times 
-   \left\{-1 + \frac{2^d}{n} \sum_{k<l} \sum_{j=1}^n (1-\hat{U}_{kj})(1-\hat{U}_{lj})\right\}
+   \sum_{k<l} \sum_{j=1}^n (1-\hat{U}_{kj})(1-\hat{U}_{lj})
    $$
    
    Where:
