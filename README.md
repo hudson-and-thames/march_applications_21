@@ -21,6 +21,7 @@ In a Jupyter Notebook (python):
 
 1. Download and save your universe of stocks (S&P500 constituents) (Can use Yahoo finance to get shares data. Checkout the [yfinance](https://github.com/ranaroussi/yfinance) package.)(Else you can use [Polygon](https://polygon.io/))
 1. Implement Section 3.1.1: Partner selection (At least 3 of the 4 procedures, impress us with all 4). This set of algorithms has important applications for the Vine Copula module in ArbitrageLab.
+1. We have included a helpful guide in the [Guide of Extended Approach](https://github.com/hudson-and-thames/march_applications_21/blob/main/Guide%20for%20the%20Extended%20Approach.md).
 1. Create a set of functions/class for the end-user to make use of.
 1. Make sure to add docstrings and follow PEP8 code style checks. Have plenty of inline comments, good variable names and don't over complicate things unnecessarily. It should be easy for the user to make use of.
 1. Showcase your new Partner Selection Framework in a Jupyter Notebook and show us some great visualizations (Matplotlib is a bit basic).
