@@ -29,6 +29,9 @@ class PartnerSelector():
         elif method == 'extended':
             self._calculate_extended(target_data)
             partners = [self._get_best_extended(df) for df in target_data.values()]
+        elif method == 'geometric':
+            self._calculate_geometric(target_data)
+            partners = [self._get_best_geometric(df) for df in target_data.values()]
         else:
             # todo: exception
             partners = []
@@ -48,6 +51,30 @@ class PartnerSelector():
     def _get_best_traditional(self, df):
         idx = df[['traditional']].idxmax()[0]
         return df.loc[idx]['tickers']
+
+    def _get_best_geometric(self, df):
+        idx = df[['geometric']].idxmin()[0]
+        return df.loc[idx]['tickers']
+
+    def _calculate_geometric(self, target_data):
+        d = np.full(self.dimensions, 1) # diagonal vector
+        d_dist = np.linalg.norm(d)
+        d_norm = (d / d_dist) # normalized diagonal vector
+        d_norm_r = d_norm.reshape(self.dimensions, 1)
+        for df in tqdm(target_data.values(), desc="Calculating geometric associations"):
+            results = []
+            for row in df.itertuples():
+                ticker_idx = row.tickers_idx
+                s_data = self.data_rank.iloc[ticker_idx].to_numpy()
+                # Point projected along the diagonal. 
+                # This is the intersection of the diagonal and the line perpendicular running through the point
+                p = (d_norm @ s_data) * d_norm_r
+                p_d = p - s_data
+                # Don't bother taking sqrt since we're only interested in relative values
+                dist_sqr = (p_d**2).sum(axis=0)
+                results.append(dist_sqr.sum())
+            df['geometric'] = results
+                
 
     def _calculate_extended(self, target_data):
         # ECDF quantile data based on rank observations
