@@ -134,7 +134,7 @@ class PartnerSelector():
                 s_data = self.data_rank.iloc[ticker_idx].to_numpy()
                 dist_sqr = self._calculate_geometric_impl(s_data, d_norm, d_norm_r)
                 results.append(dist_sqr.sum())
-            df['geometric'] = results
+            df[PartnerSelector.Method.GEOMETRIC] = results
 
     def get_geometric_distance(self, tickers):
         """Gets the geometric distance for the combination of tickers
