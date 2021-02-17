@@ -79,7 +79,7 @@ class ExtremalSelection(SelectionBase):
         :return: (pd.DataFrame)
         """
         self.df_returns = self._returns(df)
-        self.df_corr = self._ranked_correlations(self.df_returns)
-        self.df_rank = self.df_returns.rank()
-        df_corr_top50 = self._top_50_correlations(self.df_corr)
+        self.ranked_correlation = self._ranked_correlations(self.df_returns)
+        self.ranked_returns = self.df_returns.rank()
+        df_corr_top50 = self._top_50_correlations(self.ranked_correlation)
         return self._get_quadruples(df_corr_top50)

@@ -60,7 +60,7 @@ class ExtendedSelection(SelectionBase):
         :return: (pd.DataFrame)
         """
         df_returns = self._returns(df)
-        self.df_corr = self._ranked_correlations(df_returns)
-        df_corr_top50 = self._top_50_correlations(self.df_corr)
+        self.ranked_correlation = self._ranked_correlations(df_returns)
+        df_corr_top50 = self._top_50_correlations(self.ranked_correlation)
         self.ecdf_df = self._transform_df(df_returns)
         return self._get_quadruples(df_corr_top50)

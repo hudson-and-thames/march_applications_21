@@ -49,7 +49,7 @@ class GeometricSelection(SelectionBase):
         :return: (pd.DataFrame)
         """
         df_returns = self._returns(df)
-        self.df_corr = self._ranked_correlations(df_returns)
+        self.ranked_correlation = self._ranked_correlations(df_returns)
         self.ranked_df = df_returns.rank(pct=True)
-        df_corr_top50 = self._top_50_correlations(self.df_corr)
+        df_corr_top50 = self._top_50_correlations(self.ranked_correlation)
         return self._get_quadruples(df_corr_top50)

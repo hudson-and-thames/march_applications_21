@@ -20,7 +20,7 @@ class TraditionalSelection(SelectionBase):
         # Create a subset dataframe of all top 50 correlated stocks + target stock.
         # This increases the lookup speed.
         stock_selection = [target_stock] + combinations
-        df_subset = self.df_corr.loc[stock_selection, stock_selection].copy()
+        df_subset = self.ranked_correlation.loc[stock_selection, stock_selection].copy()
         # Next we will convert the stock names into integers and then get a list of all combinations with a length of 3
         num_of_stocks = len(stock_selection)
         # exclude the target stock
@@ -54,7 +54,7 @@ class TraditionalSelection(SelectionBase):
         :return: (pd.DataFrame)
         """
         df_returns = self._returns(df)
-        self.df_corr = self._ranked_correlations(df_returns)
-        df_corr_top50 = self._top_50_correlations(self.df_corr)
+        self.ranked_correlation = self._ranked_correlations(df_returns)
+        df_corr_top50 = self._top_50_correlations(self.ranked_correlation)
         quadruples = df_corr_top50.groupby('TARGET_STOCK').apply(self._get_highest_corr_partners)
         return quadruples
