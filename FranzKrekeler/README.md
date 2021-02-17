@@ -10,4 +10,4 @@ The requirements are mainly numpy, pandas.
 The work was done in effort for the application of the march apprenticeship of Hudson & Thames
 
 
-![uml diagram](FranzKrekeler/UML_data.png)
+![uml diagram](UML_data.png)
