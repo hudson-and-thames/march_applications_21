@@ -6,7 +6,15 @@ import numpy as np
 
 
 class TraditionalSelection(SelectionBase):
-    def _get_pair_with_highest_corr_sum(self, group: pd.DataFrame):
+    """
+    This class implements the traditional approach for pair selection. Mentioned section 3.1
+    of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+    """
+    def _get_highest_pairs(self, group: pd.DataFrame):
+        """
+        internal helper function for apply in Pandas
+        :param group: (pd.DataFrame) this the result of .groupBy...
+        """
         target_stock = group.name
         combinations = group.STOCK_PAIR.tolist()
         # Create a subset dataframe of all top 50 correlated stocks + target stock.
@@ -37,16 +45,14 @@ class TraditionalSelection(SelectionBase):
         # Afterwards we return the maximum index for the sums
         max_index = np.argmax((np.expand_dims(one_hot, axis=2) * np.expand_dims(df_subset, axis=0) * np.expand_dims(one_hot, axis=1)).sum(axis=(1, 2)))
         # Finally convert the index to the list of stocks and return the column names
-        return df_subset.columns[list(all_possible_combinations[max_index])].tolist()
-
-    def _get_quadruples(self, df_corr_top50):
-        qf = df_corr_top50.groupby('TARGET_STOCK').apply(self._get_pair_with_highest_corr_sum)
-        return qf
-
-    def convert_pairs_series_to_list(self, pairs):
-        return np.concatenate((np.array([pairs.index.tolist()]).T, pairs.tolist()), axis=1)
+        return [target_stock] + df_subset.columns[list(all_possible_combinations[max_index])].tolist()
 
     def select_pairs(self, df: pd.DataFrame):
+        """
+        main function to return quadruples of correlated stock (spearman)
+        :return: (pd.DataFrame)
+        """
         self.df_corr = self._ranked_correlations(df)
         df_corr_top50 = self._top_50_correlations(self.df_corr)
-        return self._get_quadruples(df_corr_top50)
+        quadruples = df_corr_top50.groupby('TARGET_STOCK').apply(self._get_highest_pairs)
+        return quadruples

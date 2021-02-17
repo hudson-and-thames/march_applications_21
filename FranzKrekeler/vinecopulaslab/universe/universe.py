@@ -56,7 +56,7 @@ class UniverseDownloader:
             except FileNotFoundError:
                 print("File could not be loaded from cache")
         sp500data = self._fetch_historic_sp500_data(
-            start="2015-01-01", end="2020-01-01")
+            start=start, end=end)
         sp500historic_close = sp500data['Close'].dropna(how='all')
         if self.cache:
             if not os.path.exists(self.cachepath):
