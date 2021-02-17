@@ -7,10 +7,10 @@ import numpy as np
 
 class TraditionalSelection(SelectionBase):
     """
-    This class implements the traditional approach for pair selection. Mentioned section 3.1
+    This class implements the traditional approach for partner selection. Mentioned section 3.1
     of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
-    def _get_highest_pairs(self, group: pd.DataFrame):
+    def _get_highest_corr_partners(self, group: pd.DataFrame):
         """
         internal helper function for apply in Pandas
         :param group: (pd.DataFrame) this the result of .groupBy...
@@ -23,8 +23,9 @@ class TraditionalSelection(SelectionBase):
         df_subset = self.df_corr.loc[stock_selection, stock_selection].copy()
         # Next we will convert the stock names into integers and then get a list of all combinations with a length of 3
         num_of_stocks = len(stock_selection)
-        possible_pairs_for_target_stock = np.arange(num_of_stocks)[1:]  ## exclude the target stock
-        all_possible_combinations = list(itertools.combinations(possible_pairs_for_target_stock, 3))
+        # exclude the target stock
+        possible_partners_for_target_stock = np.arange(num_of_stocks)[1:]
+        all_possible_combinations = list(itertools.combinations(possible_partners_for_target_stock, 3))
         # Here we one hot encode the array of combinations so we can perform matrix multiplication
         # Currently tensforflow is used because of it's functionality to of it's one hot api.
         # Could be done in pure numpy
@@ -47,12 +48,13 @@ class TraditionalSelection(SelectionBase):
         # Finally convert the index to the list of stocks and return the column names
         return [target_stock] + df_subset.columns[list(all_possible_combinations[max_index])].tolist()
 
-    def select_pairs(self, df: pd.DataFrame):
+    def find_partners(self, df: pd.DataFrame):
         """
-        main function to return quadruples of correlated stock (spearman)
+        main function to return quadruples of correlated stock (spearman) method
         :return: (pd.DataFrame)
         """
-        self.df_corr = self._ranked_correlations(df)
+        df_returns = self._returns(df)
+        self.df_corr = self._ranked_correlations(df_returns)
         df_corr_top50 = self._top_50_correlations(self.df_corr)
-        quadruples = df_corr_top50.groupby('TARGET_STOCK').apply(self._get_highest_pairs)
+        quadruples = df_corr_top50.groupby('TARGET_STOCK').apply(self._get_highest_corr_partners)
         return quadruples
