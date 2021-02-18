@@ -1,10 +1,8 @@
 import pandas as pd
 import numpy as np
-
 """
 Class approach_choice offers four different approaches for users to choose from in the partner selection phase.
 """
-
 class approach_choice:
     
     def __init__(self, return_df):
@@ -12,9 +10,8 @@ class approach_choice:
         Setting up class attribute.
         """
         self.return_df = return_df
-    
-    
-    def euclidean_distance(self, array):
+        
+    def euclidean_distance(self, quadruple):
         """
         Calculate the Euclidean distance between a point representing ranks of stocks and 
         the diagonal line starting from point (0,0,0,0) to point (1,1,1,1) in four-dimensional space.
@@ -29,10 +26,8 @@ class approach_choice:
             The calculated sum of distance from each points to the four-dimensional diagonal line.   
         """
 
-        distance = np.linalg.norm( array - array@np.array([1,1,1,1])/4 * np.array([1,1,1,1]) )
+        distance = np.linalg.norm( quadruple - quadruple@np.array([1,1,1,1])/4 * np.array([1,1,1,1]) )
         return distance
-
-
     
     def traditional(self, final_pair_dict, df_corr):
         """
@@ -113,8 +108,7 @@ class approach_choice:
                 pair_rho_val_dict[target_stock][tuple(indexes)] = mulSpearman
     
     
-        return pair_rho_val_dict
-    
+        return pair_rho_val_dict 
     
     def geometric(self, final_pair_dict, df_corr):
         """
@@ -135,8 +129,7 @@ class approach_choice:
             keys : target stocks
             values : Euclidean distance summation of each quadruple candidates. 
             
-        """
-        
+        """  
         pair_dist_val_dict = {}
 
         for target_stock in final_pair_dict:
@@ -271,6 +264,3 @@ class approach_choice:
      
         return result_pair_dict
         
-              
-    
-      
