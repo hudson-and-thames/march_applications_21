@@ -11,7 +11,7 @@ class approach_choice:
         """
         self.return_df = return_df
         
-    def euclidean_distance(self, quadruple):
+    def __euclidean_distance(self, quadruple):
         """
         Calculate the Euclidean distance between a point representing ranks of stocks and 
         the diagonal line starting from point (0,0,0,0) to point (1,1,1,1) in four-dimensional space.
@@ -150,9 +150,9 @@ class approach_choice:
                 # A created list to store distance values
                 lst_dist=[]
                 for j in range(0, len(self.return_df)):
-                    array = np.array([a[j], b[j], c[j], d[j]])
+                    quadruple = np.array([a[j], b[j], c[j], d[j]])
 
-                    distance = self.euclidean_distance(array)
+                    distance = self.__euclidean_distance(quadruple)
                     lst_dist.append(distance)
 
                 # Sum of distance of a quadruple
