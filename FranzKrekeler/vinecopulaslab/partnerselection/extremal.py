@@ -35,7 +35,7 @@ class ExtremalSelection(SelectionBase):
     def _find_partners_for_target_stock(self, group):
         """
         Helper function for df.groupby("TARTGET_STOCK").apply(...)
-         :param group: (group) The group of 50 most correlated stocks
+        :param group: (group) The group of 50 most correlated stocks
         :return: (List[str]) returns a list of highest correlated quadruple
         """
         raise "Not implemented"
