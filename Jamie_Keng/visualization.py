@@ -6,7 +6,6 @@ import numpy as np
 
 class visualization:  
     def __init__(self, return_df):
-        
         self.return_df = return_df
      
     def scatterplot_matrix(self, approach_result, target_stock_index):
@@ -23,7 +22,6 @@ class visualization:
         Reference
         ---------
         http://rasbt.github.io/mlxtend/user_guide/plotting/scatterplotmatrix/
-
         """
         sns.set_theme(style="darkgrid")
 
@@ -31,7 +29,6 @@ class visualization:
         sns.pairplot(df)
     
     def countfrequency(self, my_list): 
-
         # An empty dictionary  
         freq = {} 
         for items in my_list: 
@@ -55,14 +52,12 @@ class visualization:
         num : int 
             The number of the top most commonly picked partner stocks.   
         """
-        
         # Transform each value's type from a tuple to a list.
         for key in approach_result:
             approach_result[key] = list(approach_result[key])
 
         # Combine all the values in the result dictionary
         comb_result = sum(list(approach_result.values()), [])
-        
         combined_dict = self.CountFrequency(comb_result)
         
         # Eliminate stocks that only appear once(being a target stock in a quadruple.)
@@ -148,5 +143,4 @@ class visualization:
 
             plt.xlabel("PCA_1")        
             plt.ylabel("PCA_2")
-
             plt.show()
