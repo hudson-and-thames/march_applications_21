@@ -25,7 +25,6 @@ class approach_choice:
         distance : float
             The calculated sum of distance from each points to the four-dimensional diagonal line.   
         """
-
         distance = np.linalg.norm( quadruple - quadruple@np.array([1,1,1,1])/4 * np.array([1,1,1,1]) )
         return distance
     
@@ -107,7 +106,6 @@ class approach_choice:
 
                 pair_rho_val_dict[target_stock][tuple(indexes)] = mulSpearman
     
-    
         return pair_rho_val_dict 
     
     def geometric(self, final_pair_dict, df_corr):
@@ -153,9 +151,7 @@ class approach_choice:
                 for j in range(0, len(self.return_df)):
                     array = np.array([a[j], b[j], c[j], d[j]])
 
-
                     distance = self.euclidean_distance(array)
-
                     lst_dist.append(distance)
 
                 # Sum of distance of a quadruple
@@ -163,8 +159,7 @@ class approach_choice:
 
                 # Store sum of distance to pair dictionary
                 pair_dist_val_dict[target_stock][tuple(indexes)] = sum_dist
-
-                
+           
         return pair_dist_val_dict
     
     def extremal(self, final_pair_dict, df_corr):
@@ -196,7 +191,6 @@ class approach_choice:
                 # Indexes of target stock + 3 partner stocks on the dataset, sp500
                 indexes = list(list(final_pair_dict[target_stock])[pair_num])
 
-
                 # Normalized ranks of each stocks
                 length = (len(self.return_df)+1)
                 a = self.return_df.iloc[:,indexes[0]].rank()/ length 
@@ -215,23 +209,19 @@ class approach_choice:
 
                     density_derivative.append(ans)
 
-
                 # Mean of the values of density derivative
                 statistic= sum(density_derivative)/len(self.return_df)
 
                 # Store sum of distance to pair dictionary
                 pair_derivative_val_dict[target_stock][tuple(indexes)] = statistic
 
-                
         return pair_derivative_val_dict
          
     def final_quadruple(self, quadruple_dict, approach):
         """
-        
         Parameters
         ----------
         quadruple_dict : dictionary
-        
         approach : string
             The name of the apporach a user chooses to conduct partner selection. 
             (valid inputs: "traditional", "extended", "geometric", "extremal")
