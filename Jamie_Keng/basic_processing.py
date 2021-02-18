@@ -6,18 +6,12 @@ from itertools import permutations
 """
 Class basic_processing provides a function to filter out potential highly correlated stocks 
 for each stock in the dataset. Users have the option to set the number of potential partner stocks they want. 
-
 """
 
 class basic_processing:
     
-    def __init__(self):
-        pass
-
-    
     def partner_selection(self, ret_df, partner_num):
         """
-        
         Parameters
         ----------
         ret_df : pandas dataframe
@@ -32,20 +26,16 @@ class basic_processing:
         partner_dict : dictionary   
             A dictionary containing all possible partner-stock candidates for each target stock.
         
-        
+        Reference
+        ---------
+        # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.corr.html
         """
-        
-    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.corr.html
-
-
         # Obtain pairwise Spearsman's rho in thw dataset. 
         df_corr = ret_df.corr(method = "spearman")
-        #df_corr
 
         # Build an empty dictionary to store a number of top partners for each target stock.
         partner_dict = {target: None for target in range(len(df_corr))}
 
-        #partner_dict
         for target_stock in range(len(df_corr)):
             lst = []
             for stock in range(len(df_corr)):
@@ -55,10 +45,8 @@ class basic_processing:
 
             partner_dict[target_stock]= top_partner
 
-        
         return df_corr, partner_dict    
 
-    
     def potential_quadruples(self, partner_dict):
         """
         Parameters
@@ -76,7 +64,6 @@ class basic_processing:
             
             keys: target stocks
             values: potential quadruples
-
         """
         
         # Potential quadruples formation
@@ -100,6 +87,4 @@ class basic_processing:
        
         
         return final_pair_dict
-
-
-
+    
