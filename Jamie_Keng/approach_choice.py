@@ -2,10 +2,7 @@ import pandas as pd
 import numpy as np
 
 """
-
 Class approach_choice offers four different approaches for users to choose from in the partner selection phase.
-
-
 """
 
 class approach_choice:
@@ -19,7 +16,6 @@ class approach_choice:
     
     def euclidean_distance(self, array):
         """
-        
         Calculate the Euclidean distance between a point representing ranks of stocks and 
         the diagonal line starting from point (0,0,0,0) to point (1,1,1,1) in four-dimensional space.
 
@@ -30,13 +26,10 @@ class approach_choice:
         Returns
         -------
         distance : float
-            The calculated sum of distance from each points to the four-dimensional diagonal line.
-            
+            The calculated sum of distance from each points to the four-dimensional diagonal line.   
         """
 
         distance = np.linalg.norm( array - array@np.array([1,1,1,1])/4 * np.array([1,1,1,1]) )
-
-        
         return distance
 
 
@@ -48,10 +41,8 @@ class approach_choice:
         final_pair_dict : dictionary
             The dictionary with quadruple candidates.(generated from basic_processing phase.)
         
-        
         df_corr : pandas dataframe
             The Spearman correlation matrix computed by a built-in pandas method.
-        
         
         Returns
         -------
@@ -59,7 +50,6 @@ class approach_choice:
             
             keys : target stocks 
             values : calculated sum of pairwise Spearman's rho for each quadruple candidate.
-        
         """
         pair_corr_val_dict = {}
 
@@ -75,11 +65,9 @@ class approach_choice:
                 sum_corr = (df_corr.iloc[indexes,indexes].sum().sum() -4) / 2
 
                 pair_corr_val_dict[target_stock][tuple(indexes)] = sum_corr
-                
-        
+    
         return pair_corr_val_dict
-        
-        
+              
     def extended(self, final_pair_dict, df_corr):
         """
         Parameters
@@ -87,11 +75,9 @@ class approach_choice:
         final_pair_dict : dictionary
             The dictionary with quadruple candidates.(generated from basic_processing phase.)
         
-        
         df_corr : pandas dataframe
             The spearman correlation matrix computed by a built-in pandas method.
-        
-        
+         
         Returns
         -------
         pair_rho_val_dict: dictionary
@@ -100,7 +86,6 @@ class approach_choice:
             
             keys : target stocks 
             values : multivariate Spearman's rho for each quadruple candidate.
-        
         """
         pair_rho_val_dict = {}
 
@@ -140,7 +125,6 @@ class approach_choice:
         
         df_corr : pandas dataframe
             The spearman correlation matrix computed by a built-in pandas method.
-        
         
         Returns
         -------
@@ -190,7 +174,6 @@ class approach_choice:
                 
         return pair_dist_val_dict
     
-    
     def extremal(self, final_pair_dict, df_corr):
         """
         Parameters
@@ -200,8 +183,7 @@ class approach_choice:
         
         df_corr : pandas dataframe
             The spearman correlation matrix computed by a built-in pandas method.
-        
-        
+         
         Returns
         -------
         pair_derivative_val_dict: dictionary
@@ -209,7 +191,6 @@ class approach_choice:
             
             keys : target stocks
             values : chi square statistic for each quadruple candidate.
-            
         """
         
         pair_derivative_val_dict = {}
@@ -250,8 +231,7 @@ class approach_choice:
 
                 
         return pair_derivative_val_dict
-        
-    
+         
     def final_quadruple(self, quadruple_dict, approach):
         """
         
@@ -270,9 +250,7 @@ class approach_choice:
             
             keys : target stocks
             values : The one and only quadruple selected by any approach's mechanism for each target stock.
-
         """
-        
         result_pair_dict = {}
         
         if (approach == "traditional")|(approach == "extended")|(approach == "extremal"):
@@ -290,9 +268,7 @@ class approach_choice:
                 keymax = min(quadruple_dict[pair], key= quadruple_dict[pair].get)
 
                 result_pair_dict[pair] = keymax 
-
-            
-            
+     
         return result_pair_dict
         
               
