@@ -150,4 +150,3 @@ class visualization:
             plt.ylabel("PCA_2")
 
             plt.show()
-        
