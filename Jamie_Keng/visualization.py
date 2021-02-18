@@ -4,13 +4,11 @@ from collections import Counter
 from sklearn.decomposition import PCA
 import numpy as np
 
-class visualization:
-    
+class visualization:  
     def __init__(self, return_df):
         
         self.return_df = return_df
-    
-        
+     
     def scatterplot_matrix(self, approach_result, target_stock_index):
         """
         Parameters
@@ -22,31 +20,26 @@ class visualization:
         target_stock_index : int
             The corresponding index of a target stock.
                     
-        
         Reference
         ---------
         http://rasbt.github.io/mlxtend/user_guide/plotting/scatterplotmatrix/
 
         """
-
         sns.set_theme(style="darkgrid")
 
         df = self.return_df.iloc[:,list(approach_result[target_stock_index])]
         sns.pairplot(df)
-        
     
-    def CountFrequency(self, my_list): 
+    def countfrequency(self, my_list): 
 
         # An empty dictionary  
         freq = {} 
         for items in my_list: 
             freq[items] = my_list.count(items) -1 
 
-
         return freq
     
-    
-    def Freq_partner_stocks(self, approach_result, stock_ind_dict, num =10):
+    def freq_partner_stocks(self, approach_result, stock_ind_dict, num =10):
         """
         Parameters
         ----------
@@ -60,9 +53,7 @@ class visualization:
                 values : stock tickers
         
         num : int 
-            The number of the top most commonly picked partner stocks.
-        
-        
+            The number of the top most commonly picked partner stocks.   
         """
         
         # Transform each value's type from a tuple to a list.
@@ -94,7 +85,6 @@ class visualization:
         for key in list(dict_):
             new_dict[stock_ind_dict[key]] = dict_[key]
         
-        
         # Plot the freqency histogram
         plt.figure(figsize=(8,5))
         data = new_dict
@@ -104,9 +94,7 @@ class visualization:
         plt.ylabel("frequency")
         plt.show()
         
-
-        
-    def PCA_plot(self, approach_result, target_stock_index, choice):
+    def pca_plot(self, approach_result, target_stock_index, choice):
         """
         Plot the first and second most important primary components. 
         The notion here is that if stocks in a quadruple are closely correlated,
@@ -124,9 +112,7 @@ class visualization:
         choice: string
             A user can choose either show the PCA result of all quadruples or show the PCA result of a single quadruple.
             (valid inputs : "single", "all") 
-        
-        """
-        
+        """     
         pca = PCA(n_components =2)
 
         # Need dataframe.transpose() to fit into PCA method.
@@ -164,13 +150,4 @@ class visualization:
             plt.ylabel("PCA_2")
 
             plt.show()
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
