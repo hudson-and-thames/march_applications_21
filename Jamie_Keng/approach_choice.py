@@ -18,8 +18,9 @@ class approach_choice:
 
         Parameters 
         ----------
-        array : numpy array
-
+        quadruple : numpy array
+            A point represents a quadruple candidate in four dimensional space.
+            
         Returns
         -------
         distance : float
