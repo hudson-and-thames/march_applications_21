@@ -52,7 +52,7 @@ class SelectionBase(object):
         return corr_returns_top_n.sort_values(['TARGET_STOCK', 'CORRELATION'])
 
     @staticmethod
-    def _prepare_combinations_of_partners(self, stock_selection: List[str], return_target_stock=True) -> pd.DataFrame:
+    def _prepare_combinations_of_partners(stock_selection: List[str], return_target_stock=True) -> pd.DataFrame:
         """Helper function to calculate all combinations for a target stock and it's potential partners
         :param: stock_selection (pd.DataFrame): the target stock has to be the first element of the array
         :param: return_target_stock (bool): the target stock can be left out when returning the combinations
