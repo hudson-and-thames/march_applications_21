@@ -7,12 +7,14 @@ import scipy.special
 import scipy.linalg
 from vinecopulaslab.partnerselection.base import SelectionBase
 
+
 class ExtremalSelection(SelectionBase):
     """
-    Class for partner selection based on "A multivariate linear rank test of independence based on a multiparametric copula with cubic sections"
+    Class for partner selection based on "A multivariate linear rank test of independence
+    based on a multiparametric copula with cubic sections"
     Mangold 2015
-    :return: (pd.DataFrame)
     """
+
     def __init__(self):
         """Initialization
         """
@@ -21,8 +23,10 @@ class ExtremalSelection(SelectionBase):
 
     def _partner_selection_approach(self, group):
         """
-        Approach function for df.groupby("TARTGET_STOCK").apply(...)
-        This has only been implented for performance testing.
+        Approach function Partner selection based on "A multivariate linear rank test of independence based on
+        a multiparametric copula with cubic sections"
+        for df.groupby("TARGET_STOCK").apply(...)
+        This has only been implemented for performance testing.
         References:
         https://www.researchgate.net/publication/309408947_A_multivariate_linear_rank_test_of_independence_based_on_a_multiparametric_copula_with_cubic_sections
         https://pypi.org/project/Independence-test/
@@ -55,8 +59,8 @@ class ExtremalSelection(SelectionBase):
         neg_rank_df = rank_df_norm * (2 - 3 * rank_df_norm)
         # performance here is still lagging
         # Proposition 3.3. from the paper
-        pos_neg_combined = np.add(np.einsum('ijk,lmk->jmik',pos_rank_df,np.expand_dims(permut_mat > 0, axis=0)),
-                        np.einsum('ijk,lmk->jmik',neg_rank_df,np.expand_dims(permut_mat < 0, axis=0)))
+        pos_neg_combined = np.add(np.einsum('ijk,lmk->jmik', pos_rank_df, np.expand_dims(permut_mat > 0, axis=0)),
+                                  np.einsum('ijk,lmk->jmik', neg_rank_df, np.expand_dims(permut_mat < 0, axis=0)))
         TNP = pos_neg_combined.prod(axis=-1).mean(-1)
         # Incomplete: Still not documented
         # performance here is also not optimal here
@@ -64,6 +68,7 @@ class ExtremalSelection(SelectionBase):
         T_results = np.diag(T[:, 0, :]) * n
         max_index = np.argmax(T_results)
         partners = data_subset.columns[list(quadruples_combinations[max_index])].tolist()
+        # Please take this with a grain of salt, I was too obsessed with a proof of concept.
         return partners
 
     def _preprocess(self, close: pd.DataFrame) -> pd.DataFrame:
@@ -80,12 +85,15 @@ class ExtremalSelection(SelectionBase):
     def find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
         """
         Find partners based on the extremal approach mentioned in section 3.1
-        of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
-        Based on the paper  Class for partner selection based on "A multivariate linear rank test of independence based on a multiparametric copula with cubic sections" Mangold 2015
+        of the paper "Statistical arbitrage with vine copulas"
+        https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+        Based on the paper  Class for partner selection based on "A multivariate linear rank test of independence
+        based on a multiparametric copula with cubic sections" Mangold 2015
         :param: close (pd.DataFrame) The close prices of the SP500
         :param: target_stocks (List[str]) A list of target stocks to analyze
         :return: (List[str]) returns a list of highest correlated quadruple
         """
         self._preprocess(close)
-        # find_partners could be moved to the base class but then it woudln't have the right docstring... looking for best practice
+        # find_partners could be moved to the base class but then it wouldn't have the right docstring...
+        # looking for best practice
         return self._find_partners(target_stocks)

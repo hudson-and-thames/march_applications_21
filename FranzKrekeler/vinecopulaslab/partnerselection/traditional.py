@@ -10,6 +10,7 @@ class TraditionalSelection(SelectionBase):
     of the paper "Statistical arbitrage with vine copulas"
     https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
+
     def __init__(self):
         """Initialization
         """
@@ -41,10 +42,11 @@ class TraditionalSelection(SelectionBase):
         df_subset = self.ranked_correlation.loc[stock_selection, stock_selection].copy()
         # Here the magic happens:
         # We use the combinations as an index
-        corr_matrix_a = df_subset.values[:,all_possible_combinations]
+        corr_matrix_a = df_subset.values[:, all_possible_combinations]
         # corr_matrix_a has now the shape of (51, 19600, 4)
         # We now use take along axis to get the shape (4,19600,4), then we can sum the first and the last dimension
-        corr_sums = np.sum(np.take_along_axis(corr_matrix_a, all_possible_combinations.T[..., np.newaxis], axis=0),axis=(0,2))  
+        corr_sums = np.sum(np.take_along_axis(corr_matrix_a, all_possible_combinations.T[..., np.newaxis], axis=0),
+                           axis=(0, 2))
         # this returns the shape of
         # (19600,1)
         # Afterwards we return the maximum index for the sums
@@ -55,7 +57,7 @@ class TraditionalSelection(SelectionBase):
 
     def find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
         """
-        Find partners based on the traditional apprach mentioned in section 3.1.
+        Find partners based on the traditional approach mentioned in section 3.1.
         Returns quadruples of highest scoring sum of correlated stock (spearman) method 
         of the paper "Statistical arbitrage with vine copulas"
         https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
@@ -64,5 +66,6 @@ class TraditionalSelection(SelectionBase):
         :return: (List[str]) returns a list of highest correlated quadruple
         """
         self._preprocess(close)
-        # find_partners could be moved to the base class but then it woudln't have the right docstring... looking for best practice
+        # find_partners could be moved to the base class but then it wouldn't have the right docstring...
+        # looking for best practice
         return self._find_partners(target_stocks)

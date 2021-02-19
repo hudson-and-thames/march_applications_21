@@ -13,6 +13,7 @@ class ExtendedSelection(SelectionBase):
     https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     It is an extension to the spearman correlation
     """
+
     def __init__(self):
         """Initialization
         """
@@ -76,5 +77,5 @@ class ExtendedSelection(SelectionBase):
         :return: (List[str]) returns a list of highest correlated quadruple
         """
         self._preprocess(close)
-        # find_partners could be moved to the base class but then it woudln't have the right docstring... looking for best practice
+        # find_partners could be moved to the base class but then it wouldn't have the right docstring... looking for best practice
         return self._find_partners(target_stocks)

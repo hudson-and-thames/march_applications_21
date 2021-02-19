@@ -10,12 +10,12 @@ class GeometricSelection(SelectionBase):
     of the paper "Statistical arbitrage with vine copulas"
     https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
+
     def __init__(self):
         """Initialization
         """
         super().__init__()
         self.corr_returns_top_n = None
-
 
     def _partner_selection_approach(self, group):
         """
@@ -74,11 +74,13 @@ class GeometricSelection(SelectionBase):
     def find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
         """
         Find partners based on the geometric mentioned in section 3.1
-        of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+        of the paper "Statistical arbitrage with vine copulas"
+        https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
         :param: close (pd.DataFrame) The close prices of the SP500
         :param: target_stocks (List[str]) A list of target stocks to analyze
         :return: (List[str]) returns a list of highest correlated quadruple
         """
         self._preprocess(close)
-        # find_partners could be moved to the base class but then it woudln't have the right docstring... looking for best practice
+        # find_partners could be moved to the base class but then it wouldn't have the right docstring...
+        # looking for best practice
         return self._find_partners(target_stocks)

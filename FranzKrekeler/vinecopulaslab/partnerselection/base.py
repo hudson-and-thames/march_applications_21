@@ -8,6 +8,7 @@ import pandas as pd
 class SelectionBase(object):
     """The base class for the partner selection framework.
     """
+
     def __init__(self):
         """Initialization
         """
@@ -25,7 +26,7 @@ class SelectionBase(object):
     def _ranked_correlation(returns: pd.DataFrame) -> pd.DataFrame:
         """Given a df of returns calculated it's Spearman correlation matrix
         :param: returns (pd.DataFrame): The input needs to be in percentage based returns
-        :return: returns_correlateion (pd.DataFrame)
+        :return: returns_correlation (pd.DataFrame)
         """
         return returns.corr("spearman")
 
@@ -64,7 +65,7 @@ class SelectionBase(object):
         partner_stocks_idx = np.arange(1, num_of_stocks)  # basically exclude the target stock
         partner_stocks_idx_combs = itertools.combinations(partner_stocks_idx, 3)
         return np.array(list((0,) + comb for comb in partner_stocks_idx_combs))
-        
+
     def _find_partners(self, target_stocks: List[str] = []):
         """
         Helper functions where we apply the approach to each stock. Optional a subset of target stocks can be chosen.
@@ -79,4 +80,3 @@ class SelectionBase(object):
         target_stocks_partners_quadruples = corr_returns_top_n.groupby('TARGET_STOCK').apply(
             self._partner_selection_approach)
         return target_stocks_partners_quadruples
-
