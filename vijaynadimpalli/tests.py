@@ -1,7 +1,8 @@
-import unittest
 import pandas as pd
-from ps import PartnerSelection
+import unittest
+
 from statsmodels.distributions.empirical_distribution import ECDF
+from partner_selection import PartnerSelection
 from ps_utils import get_sum_correlations, multivariate_rho, diagonal_measure, extremal_measure, get_co_variance_matrix
 from utils_multiprocess import run_traditional_correlation_calcs, run_extended_correlation_calcs, \
                                 run_diagonal_measure_calcs, run_extremal_measure_calcs

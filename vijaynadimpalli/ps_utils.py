@@ -1,7 +1,7 @@
+import itertools
 import numpy as np
 import pandas as pd
 import scipy
-import itertools
 
 
 def get_sector_data(quadruple, constituents):
@@ -99,7 +99,6 @@ def extremal_measure(u, co_variance_matrix):
     """
     u = u.to_numpy()
     n = u.shape[0]
-    u = u / ((n + 1) / n)
 
     # Calculating array T_(4,n) from proposition 3.3
     t = t_calc(u).mean(axis=1).reshape(-1, 1)  # Shape : (16, 1), Taking the mean w.r.t n
@@ -131,7 +130,7 @@ def get_co_variance_matrix():
 def t_calc(u):
     """
     Calculates T_(4,n) as seen in proposition 3.3. Each of the 16 rows in the array are appended to output and
-    returned as numpy array
+    returned as numpy array.
     :param u:
     :return: (np.array) of Shape (16, n)
     """

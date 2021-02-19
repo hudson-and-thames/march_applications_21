@@ -1,11 +1,10 @@
+import itertools
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy
-import itertools
-from statsmodels.distributions.empirical_distribution import ECDF
-import time
 import seaborn as sns
-import matplotlib.pyplot as plt
+
+from statsmodels.distributions.empirical_distribution import ECDF
 from utils_multiprocess import run_traditional_correlation_calcs, run_extended_correlation_calcs, \
     run_diagonal_measure_calcs, run_extremal_measure_calcs
 from ps_utils import get_sum_correlations, multivariate_rho, diagonal_measure, extremal_measure, get_co_variance_matrix
@@ -20,23 +19,23 @@ class PartnerSelection:
     https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
 
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, prices: pd.DataFrame):
         """
         Inputs the price series required for further calculations.
         Also includes preprocessing steps described in the paper, before starting the Partner Selection procedures.
         These steps include, finding the returns and ranked returns of the stocks, and calculating the top 50
         correlated stocks for each stock in the universe.
 
-        :param df: (pd.DataFrame): Contains price series of all stocks in universe
+        :param prices: (pd.DataFrame): Contains price series of all stocks in universe
         """
 
-        if len(df) == 0:
+        if len(prices) == 0:
             raise Exception("Input does not contain any data")
 
-        if not isinstance(df, pd.DataFrame):
+        if not isinstance(prices, pd.DataFrame):
             raise Exception("Partner Selection Class requires a pandas DataFrame as input")
 
-        self.universe = df  # Contains daily prices for all stocks in universe.
+        self.universe = prices  # Contains daily prices for all stocks in universe.
         self.returns, self.ranked_returns = self._get_returns()  # Daily returns and corresponding ranked returns.
 
         # Correlation matrix containing all stocks in universe
@@ -48,24 +47,23 @@ class PartnerSelection:
 
     def _correlation(self) -> pd.DataFrame:
         """
-        Calculates correlation between all stocks in universe
+        Calculates correlation between all stocks in universe.
 
         :return: (pd.DataFrame) : Correlation Matrix
         """
 
-        return self.ranked_returns.corr(method='pearson')  # pearson or spearman,we get same results as input is ranked
+        return self.ranked_returns.corr(method='pearson')  # Pearson or spearman,we get same results as input is ranked
 
     def _get_returns(self) -> (pd.DataFrame, pd.DataFrame):
         """
-        Calculating daily returns and ranked daily returns of the stocks
+        Calculating daily returns and ranked daily returns of the stocks.
 
         :return (tuple):
             returns_df : (pd.DataFrame) : Dataframe consists of daily returns
             returns_df_ranked : (pd.DataFrame) : Dataframe consists of ranked daily returns between [0,1]
         """
 
-        returns_df = (self.universe - self.universe.shift(1))
-        returns_df = returns_df / self.universe.shift(1)
+        returns_df = self.universe.pct_change()
         returns_df = returns_df.replace([np.inf, -np.inf], np.nan).ffill().dropna()
 
         # Calculating rank of daily returns for each stock. 'first' method is used to assign ranks in order they appear
@@ -74,14 +72,14 @@ class PartnerSelection:
 
     def _top_50_tickers(self) -> pd.DataFrame:
         """
-        Calculates the top 50 correlated stocks for each target stock
+        Calculates the top 50 correlated stocks for each target stock.
 
         :return: (pd.DataFrame) : Dataframe consisting of 50 columns for each stock in the universe
         """
 
         def tickers_list(col):
             """
-            Returns list of tickers ordered according to correlations with target
+            Returns list of tickers ordered according to correlations with target.
             """
             # Sort the column data in descending order and return the index of top 50 rows.
             return col.sort_values(ascending=False)[1:51].index.to_list()
@@ -91,7 +89,7 @@ class PartnerSelection:
 
     def _generate_all_quadruples(self) -> pd.DataFrame:
         """
-         Method generates unique quadruples for all target stocks in universe
+         Method generates unique quadruples for all target stocks in universe.
 
          :return: (pd.DataFrame) : consists of all quadruples for every target stock
          """
@@ -101,7 +99,7 @@ class PartnerSelection:
     @staticmethod
     def _generate_all_quadruples_helper(row: pd.Series) -> list:
         """
-         Helper function which generates unique quadruples for each target stock
+         Helper function which generates unique quadruples for each target stock.
 
          :param row: (pd.Series) : list of 50 partner stocks
          :return: (list) : quadruples
@@ -340,7 +338,7 @@ class PartnerSelection:
 
     def plot_correlation(self):
         """
-        Plot heatmap of correlations
+        Plot heatmap of correlations.
         """
 
         fig = plt.figure(figsize=(20, 20))

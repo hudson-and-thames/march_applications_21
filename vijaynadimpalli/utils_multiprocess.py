@@ -1,7 +1,6 @@
-import pandas as pd
 import numpy as np
-import itertools
-import scipy
+import pandas as pd
+
 from mlfinlab.util.multiprocess import mp_pandas_obj
 from ps_utils import get_sum_correlations, multivariate_rho, diagonal_measure, extremal_measure
 

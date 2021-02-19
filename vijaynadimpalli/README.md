@@ -7,7 +7,7 @@ Please refer to the jupyter notebook for a representation of the code present in
 
 - data folder : Contains csv files representing daily pricing data for all stocks in S&P 500.  
 - PartnerSelection.ipynb : Notebook contains code execution and results.
-- ps.py : Contains PartnerSelection class.
+- partner_selection.py : Contains PartnerSelection class.
 - ps_utils.py : Contains helper functions for PartnerSelection.
 - utils_multiprocess.py : Contains helper functions for multiprocessing implementations.
 - tests.py : Contains python unittests.
