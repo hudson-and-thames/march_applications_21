@@ -14,53 +14,52 @@ class ExtendedSelection(SelectionBase):
     of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     It is an extension to the spearman correlation
     """
-    def _transform_df(self, df_returns: pd.DataFrame) -> pd.DataFrame:
+    def _preprocess(self, close: pd.DataFrame) -> pd.DataFrame:
         """
         Calculates the ECDF for each stock
         """
-        ecdf_df = df_returns.apply(lambda x: ECDF(x)(x), axis=0)
-        return ecdf_df
+        self.close_returns = self.calculate_returns(close)
+        self.ranked_correlation = self._ranked_correlation(self.close_returns)
+        self.corr_returns_top_n = self._top_n_correlations(self.ranked_correlation)
+        self.ecdf_df = self.close_returns.apply(lambda x: ECDF(x)(x), axis=0)
 
-    def _find_partners_for_target_stock(self, group) -> List[str]:
+    def _partner_selection_approach(self, group) -> List[str]:
         """
         Helper function for df.groupby("TARTGET_STOCK").apply(...)
         :param group: (group) The group of 50 most correlated stocks
         :return: (List[str]) returns a list of highest correlated quadruple
         """
-        target_stock = group.name
-        partner_stocks = group.STOCK_PAIR.tolist()
-        all_stocks = [target_stock] + partner_stocks
-        # We create a subset of our ecdf dataframe to increase lookup speed.
-        df_subset = self.ecdf_df[all_stocks].copy()
-        num_of_stocks = len(all_stocks)
-        # We turn our partner stocks into numerical indices so we can use them directly for indexing
-        possible_partners_for_target_stock = np.arange(num_of_stocks)[1:]  # exclude the target stock
-        partner_combinations = itertools.combinations(possible_partners_for_target_stock, 3)
-        # Let's add the target stock
-        combinations_quadruples = np.array(list((0,) + comb for comb in partner_combinations))
-        # We can now use our list of possible quadruples as an index
-        df_all_quadruples = df_subset.values[:, combinations_quadruples]
-        # Now we can get closer to a vectorized calculation
-        n, _, d = df_all_quadruples.shape
-        hd = (d + 1)/(2**d-d-1)
-        ecdf_df_product = np.product(df_all_quadruples, axis=-1)
-        est1 = hd * (-1 + (2**d / n) * (1-ecdf_df_product).sum(axis=0))
-        est2 = hd * (-1 + (2**d / n) * ecdf_df_product.sum(axis=0))
-        idx = np.array([(k, l) for l in range(0, d) for k in range(0, l)])
-        est3 = -3 + (12 / (n*scipy.special.comb(n, 2, exact=True))) * ((1 - df_all_quadruples[:, :, idx[:, 0]])*(1-df_all_quadruples[:, :, idx[:, 1]])).sum(axis=(0, 2))
-        quadruples_scores = (est1 + est2 + est3)/3
-        # The quadruple scores have the shape of (19600,1) now
-        max_index = np.argmax(quadruples_scores)
-        return df_subset.columns[list(combinations_quadruples[max_index])].tolist()
 
-    def find_partners(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         main function to return quadruples of correlated stock based on an extended version of Spearman's rank correlation
         Mentioned in section 3.1 of the paper linked in the Readme
         :return: (pd.DataFrame)
         """
-        df_returns = self._returns(df)
-        self.ranked_correlation = self._ranked_correlations(df_returns)
-        df_corr_top50 = self._top_50_correlations(self.ranked_correlation)
-        self.ecdf_df = self._transform_df(df_returns)
-        return self._get_quadruples(df_corr_top50)
+        target_stock = group.name
+        partner_stocks = group.STOCK_PAIR.tolist()
+        stock_selection = [target_stock] + partner_stocks
+        # We create a subset of our ecdf dataframe to increase lookup speed.
+        data_subset = self.ecdf_df[stock_selection].copy()
+        # We turn our partner stocks into numerical indices so we can use them directly for indexing
+        quadruples_combinations = self._prepare_combinations_of_partners(stock_selection)
+        # We can now use our list of possible quadruples as an index
+        quadruples_combinations_data = data_subset.values[:, quadruples_combinations]
+        # Now we can get closer to a vectorized calculation
+        # n is equal to the total number of returns d to the number of stocks
+        # we use lodash because we don't need the 19600 dimension
+        n, _, d = quadruples_combinations_data.shape
+        # We split up the given formula
+        # For reference:
+        # https://github.com/hudson-and-thames/march_applications_21/blob/main/Guide%20for%20the%20Extended%20Approach.pdf
+        hd = (d + 1)/(2**d-d-1)
+        ecdf_df_product = np.product(quadruples_combinations_data, axis=-1)
+        est1 = hd * (-1 + (2**d / n) * (1-ecdf_df_product).sum(axis=0))
+        est2 = hd * (-1 + (2**d / n) * ecdf_df_product.sum(axis=0))
+        # here we create the index as we will use it on specific dimensions
+        idx = np.array([(k, l) for l in range(0, d) for k in range(0, l)])
+        est3 = -3 + (12 / (n*scipy.special.comb(n, 2, exact=True))) * ((1 - quadruples_combinations_data[:, :, idx[:, 0]])*(1-quadruples_combinations_data[:, :, idx[:, 1]])).sum(axis=(0, 2))
+        quadruples_scores = (est1 + est2 + est3)/3
+        # The quadruple scores have the shape of (19600,1) now
+        max_index = np.argmax(quadruples_scores)
+        return data_subset.columns[list(quadruples_combinations[max_index])].tolist()
+

@@ -23,8 +23,9 @@ class UniverseDownloader:
         """
         self.cache = cache
         self.cachepath = cachepath
-
-    def fetch_sp500symbols(self) -> List[str]:
+    
+    @staticmethod
+    def fetch_sp500symbols() -> List[str]:
         """
         Fetches constituents symbols of the SP500 from GitHub repository and returns it as a list.
         :return: (List[str]) returns a list of SP500 symbols
@@ -41,25 +42,26 @@ class UniverseDownloader:
         :return: (DataFrame) returns dataframe of SP500 historic data (including open,close)
         """
         sp500symbols = self.fetch_sp500symbols()
-        sp500df = yf.download(" ".join(sp500symbols), start=start, end=end)
-        return sp500df
+        sp500prices = yf.download(" ".join(sp500symbols), start=start, end=end)
+        return sp500prices
 
-    def historic_sp500_data(self, start="2015-01-01", end="2020-01-01") -> pd.DataFrame:
+    def historic_sp500_prices(self, start="2015-01-01", end="2020-01-01") -> pd.DataFrame:
         """
         :param start: (str) start date ('2015-01-01' by default)
         :param end: (str) end date ('2020-01-01' default)
         :return: (List[str]) returns a list of SP500 symbols
         """
         if self.cache:
+            cache_pickle_path = f"{self.cachepath}/sp500_{start}_{end}.p"
             try:
-                return pd.read_pickle(f"{self.cachepath}/sp500.p")
+                return pd.read_pickle(cache_pickle_path)
             except FileNotFoundError:
                 print("File could not be loaded from cache")
-        sp500data = self._fetch_historic_sp500_data(
+        sp500_prices = self._fetch_historic_sp500_data(
             start=start, end=end)
-        sp500historic_close = sp500data['Close'].dropna(how='all')
+        sp500_closeprices = sp500_prices['Close'].dropna(how='all')
         if self.cache:
             if not os.path.exists(self.cachepath):
                 os.makedirs(self.cachepath)
-            sp500historic_close.to_pickle(f"{self.cachepath}/sp500.p")
-        return sp500historic_close
+            sp500_closeprices.to_pickle(cache_pickle_path)
+        return sp500_closeprices
