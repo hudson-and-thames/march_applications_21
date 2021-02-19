@@ -15,7 +15,8 @@ class ImportData:
     def __init__(self):
         pass
 
-    def get_list_sp500(self):
+    @staticmethod
+    def get_list_sp500():
         """
         Returns a list of constituents in S&P 500 Index from Wikipedia
         :return: (list) constituents in S&P 500 Index
@@ -26,7 +27,8 @@ class ImportData:
         ticker_list = wiki_data[0]['Symbol'].values.tolist()
         return ticker_list
 
-    def download_data(self, ticker_list, start_date, end_date):
+    @staticmethod
+    def download_data(ticker_list, start_date, end_date):
         """
         Returns a dataframe of downloaded data of the given ticker list, start date and end date
         :param ticker_list: (list) a list of tickers
@@ -49,11 +51,12 @@ class ImportData:
         )
         return price_data
 
-    def get_returns(self, price_data):
+    @staticmethod
+    def get_returns(price_data):
         """
         Returns a dataframe of stock returns for the given stock prices
         :param price_data: (pd.DataFrame) dataframe of stock prices
-        :return: (pd.DataFrmae) dataframe of stock returns
+        :return: (pd.DataFrame) dataframe of stock returns
         """
         # Get 'Close' columns of the price data and change it to percent change which is equal to stock returns
         return_data = price_data.iloc[:, price_data.columns.get_level_values(1) == 'Close'].pct_change()
@@ -72,7 +75,8 @@ class DataPreprocess():
     def __init__(self):
         pass
 
-    def get_rank(self, return_df):
+    @staticmethod
+    def get_rank(return_df):
         """
         Get rank of the dataframe for each stock
         :param return_df: (pd.DataFrame) stock returns
@@ -81,7 +85,8 @@ class DataPreprocess():
         rank_df = return_df.rank()
         return rank_df
 
-    def most_correlated_stocks(self, rank_df, num_top_stocks):
+    @staticmethod
+    def most_correlated_stocks(rank_df, num_top_stocks):
         """
         Get top n correlated stocks for a given rank dataframe
         :param rank_df: (pd.DataFrame) rank of each stock

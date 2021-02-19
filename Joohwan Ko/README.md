@@ -27,7 +27,7 @@ However, I couldn't finish working on the last part of the partner selection whi
 
 ### 2. Design Choices
 I thought I should split the module into two different files. One is for handling data which I named it after and the other is for partner selection which I also named it after. 
-Besides the data_handler.py, in partner_selector.py, I created a single class for end-user to use because I thought it would be simpler than calling different modules for different partner selection approaches. In the class, as rank dataframe and rank correlation dataframe are frequently used, I assigned them as attributes in __init__ method. Also, for each of the approaches, I made separate private methods for each one of them.
+Besides the data_handler.py, in partner_selector.py, I created a single class for end-user to use because I thought it would be simpler than calling different modules for different partner selection approaches. In the class, as rank dataframe and rank correlation dataframe are frequently used, I assigned them as attributes in __init__ method. Also, for each of the approaches, I made separate hidden methods for each one of them.
 For users, I made a single method get_partner which takes input of method for partner selection. Therefore a user can call this method only to use different types of partner selection.
 
 ### 3. Learnings
