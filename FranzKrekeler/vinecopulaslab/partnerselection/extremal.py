@@ -2,7 +2,7 @@ import itertools
 import numpy as np
 import scipy.special
 import scipy.linalg
-from .base import SelectionBase
+from vinecopulaslab.partnerselection.base import SelectionBase
 
 
 class ExtremalSelection(SelectionBase):

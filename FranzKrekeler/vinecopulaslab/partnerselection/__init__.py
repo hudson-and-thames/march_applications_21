@@ -2,7 +2,7 @@
 Classes from the partner selection Module
 """
 
-from .traditional import TraditionalSelection
-from .extended import ExtendedSelection
-from .geometric import GeometricSelection
-from .extremal import ExtremalSelection
+from vinecopulaslab.partnerselection.traditional import TraditionalSelection
+from vinecopulaslab.partnerselection.extended import ExtendedSelection
+from vinecopulaslab.partnerselection.geometric import GeometricSelection
+from vinecopulaslab.partnerselection.extremal import ExtremalSelection

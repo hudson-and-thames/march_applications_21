@@ -1,2 +1,2 @@
-from .partnerselection import TraditionalSelection, ExtendedSelection, GeometricSelection, ExtremalSelection
-from .universe import UniverseDownloader
+from vinecopulaslab.partnerselection import TraditionalSelection, ExtendedSelection, GeometricSelection, ExtremalSelection
+from vinecopulaslab.universe import UniverseDownloader

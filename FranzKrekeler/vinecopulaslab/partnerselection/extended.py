@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.special
 from statsmodels.distributions.empirical_distribution import ECDF
-from .base import SelectionBase
+from vinecopulaslab.partnerselection.base import SelectionBase
 
 
 class ExtendedSelection(SelectionBase):
@@ -13,6 +13,11 @@ class ExtendedSelection(SelectionBase):
     https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     It is an extension to the spearman correlation
     """
+    def __init__(self):
+        """Initialization
+        """
+        super().__init__()
+        self.corr_returns_top_n = None
 
     def _partner_selection_approach(self, group) -> List[str]:
         """
@@ -69,4 +74,6 @@ class ExtendedSelection(SelectionBase):
         :param: target_stocks (List[str]) A list of target stocks to analyze
         :return: (List[str]) returns a list of highest correlated quadruple
         """
-        return self._find_partners(close, target_stocks)
+        self._preprocess(close)
+        # find_partners could be moved to the base class but then it woudln't have the right docstring... looking for best practice
+        return self._find_partners(target_stocks)

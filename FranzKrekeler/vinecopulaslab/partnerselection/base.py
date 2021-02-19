@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 
 
-class SelectionBase:
+class SelectionBase(object):
     """The base class for the partner selection framework.
     """
     def __init__(self):
-        """Initilization
+        """Initialization
         """
         self.corr_returns_top_n = None
 
@@ -51,7 +51,7 @@ class SelectionBase:
         corr_returns_top_n = corr_returns_unstacked.groupby("TARGET_STOCK").head(top_n)
         return corr_returns_top_n.sort_values(['TARGET_STOCK', 'CORRELATION'])
 
-    # should be static, not possible yet due to inheritance.
+    @staticmethod
     def _prepare_combinations_of_partners(self, stock_selection: List[str], return_target_stock=True) -> pd.DataFrame:
         """Helper function to calculate all combinations for a target stock and it's potential partners
         :param: stock_selection (pd.DataFrame): the target stock has to be the first element of the array
@@ -67,22 +67,14 @@ class SelectionBase:
         if return_target_stock:
             return np.array(list((0,) + comb for comb in partner_stocks_idx_combs))
         return list(partner_stocks_idx_combs)
-
-    # override
-    def _partner_selection_approach(self):
-        pass
-
-    # override
-    def _preprocess(self, close):
-        pass
-
+    
     def _find_partners(self, target_stocks: List[str] = []):
         """
         Helper functions where we apply the approach to each stock. Optional a subset of target stocks can be chosen.
         :param: return_target_stock (List[str]): the subset of target stocks to analyze (default [])
         :return: (pd.DataFrame)
         """
-        assert isinstance(self.corr_returns_top_n , type(None))
+        assert self.corr_returns_top_n is not None
         corr_returns_top_n = self.corr_returns_top_n.copy()
         if len(target_stocks):
             sublist = corr_returns_top_n.TARGET_STOCK.isin(target_stocks)
@@ -91,9 +83,3 @@ class SelectionBase:
             self._partner_selection_approach)
         return target_stocks_partners_quadruples
 
-    def _find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
-        """
-        Helper function run the preprocessing before finding the partners
-        """
-        self._preprocess(close)
-        return self._find_partners(target_stocks)
