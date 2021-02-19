@@ -37,6 +37,7 @@ class GeometricSelection(SelectionBase):
         # Now we will create a diagonal for our distance calculation.
         # Please refer to the paper
         line = np.ones(d)
+        print(quadruples_combinations_data.shape)
         # Einsum is great for specifying which dimension to multiply together
         # this extends the distance method for all 19600 combinations
         pp = (np.einsum("ijk,k->ji", quadruples_combinations_data, line) / np.linalg.norm(line))

@@ -63,8 +63,8 @@ class SelectionBase(object):
         # We turn our partner stocks into numerical indices so we can use them directly for indexing
         partner_stocks_idx = np.arange(1, num_of_stocks)  # basically exclude the target stock
         partner_stocks_idx_combs = itertools.combinations(partner_stocks_idx, 3)
-        return list(partner_stocks_idx_combs)
-    
+        return np.array(list((0,) + comb for comb in partner_stocks_idx_combs))
+        
     def _find_partners(self, target_stocks: List[str] = []):
         """
         Helper functions where we apply the approach to each stock. Optional a subset of target stocks can be chosen.
