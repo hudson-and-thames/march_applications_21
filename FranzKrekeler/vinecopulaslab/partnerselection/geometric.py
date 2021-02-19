@@ -51,6 +51,7 @@ class GeometricSelection(SelectionBase):
     def distance_to_line(line, pts):
         """
         original helper function
+        reference: https://stackoverflow.com/a/50398213
         :param line: the line endpoint assuming it starts at point zero. For example np.array([1,1,1]) for a 3d line
         :param pts: the points to measure the distance to the line
         :return: float np.array with distances

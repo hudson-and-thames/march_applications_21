@@ -1,13 +1,13 @@
 """
 Fetch historical stock data from Yahoo Finance
 """
+import os
 from __future__ import print_function
 from typing import List
-import yfinance as yf
 import requests
 import pandas as pd
+import yfinance as yf
 
-import os
 
 
 class UniverseDownloader:
@@ -28,6 +28,8 @@ class UniverseDownloader:
     def fetch_sp500symbols() -> List[str]:
         """
         Fetches constituents symbols of the SP500 from GitHub repository and returns it as a list.
+        inspired from previous application:
+        reference: https://github.com/hudson-and-thames/oct_applications/blob/fe5a48188f5d022d5cbdc4f3c5bf475b8894513e/locnguyen/download_data.py#L15
         :return: (List[str]) returns a list of SP500 symbols
         """
         url = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents_symbols.txt"
