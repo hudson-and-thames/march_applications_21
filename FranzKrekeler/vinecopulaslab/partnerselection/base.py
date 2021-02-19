@@ -52,10 +52,9 @@ class SelectionBase(object):
         return corr_returns_top_n.sort_values(['TARGET_STOCK', 'CORRELATION'])
 
     @staticmethod
-    def _prepare_combinations_of_partners(stock_selection: List[str], return_target_stock=True) -> pd.DataFrame:
+    def _prepare_combinations_of_partners(stock_selection: List[str]) -> pd.DataFrame:
         """Helper function to calculate all combinations for a target stock and it's potential partners
         :param: stock_selection (pd.DataFrame): the target stock has to be the first element of the array
-        :param: return_target_stock (bool): the target stock can be left out when returning the combinations
         :return: the possible combinations for the quadruples.Shape (19600,4) or
         if the target stock is left out (19600,3)
         """
@@ -64,8 +63,6 @@ class SelectionBase(object):
         # We turn our partner stocks into numerical indices so we can use them directly for indexing
         partner_stocks_idx = np.arange(1, num_of_stocks)  # basically exclude the target stock
         partner_stocks_idx_combs = itertools.combinations(partner_stocks_idx, 3)
-        if return_target_stock:
-            return np.array(list((0,) + comb for comb in partner_stocks_idx_combs))
         return list(partner_stocks_idx_combs)
     
     def _find_partners(self, target_stocks: List[str] = []):

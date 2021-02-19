@@ -1,7 +1,6 @@
 from typing import List
 import pandas as pd
 import numpy as np
-import tensorflow as tf
 from vinecopulaslab.partnerselection.base import SelectionBase
 
 
@@ -34,30 +33,22 @@ class TraditionalSelection(SelectionBase):
         target_stock = group.name
         potential_partners = group.STOCK_PAIR.tolist()
         stock_selection = [target_stock] + potential_partners
-        num_of_stocks = len(stock_selection)
-        all_possible_combinations = self._prepare_combinations_of_partners(stock_selection, False)
-        # Here we one hot encode the array of combinations so we can perform matrix multiplication
-        # Currently tensforflow is used because of it's functionality to of it's one hot api.
-        # Could be done in pure numpy
+        # we convert our stocks symbols into indices and then return the combinations of the indices
+        # For example A,AAPL,... -> 0,1,...
+        # these are the quadruples we are going to use for our calculation
+        all_possible_combinations = self._prepare_combinations_of_partners(stock_selection)
         df_subset = self.ranked_correlation.loc[stock_selection, stock_selection].copy()
-        one_hot = tf.one_hot(all_possible_combinations, depth=num_of_stocks).numpy()
-        # Let's add our target stock one hot encoded
-        one_hot_target = np.zeros(num_of_stocks, dtype=bool)
-        one_hot_target[0] = True
-        one_hot = (one_hot.sum(axis=1) + one_hot_target).astype(bool)
-        # it's important to use dtype bool to save memory
         # Here the magic happens:
-        # We have encoded our combinations to an array with the shape
-        # (19600,51)
-        # Now we have to multiply with our correlations matrix which has the shape of
-        # (51,51)
-        # To do that we broadcast the dimensions to
-        # (19600,51,1) * (1,51,51) * (19600,1,51)
-        # and then take the sum
+        # We use the combinations as an index
+        corr_matrix_a = df_subset.values[:,all_possible_combinations]
+        # corr_matrix_a has now the shape of (51, 19600, 4)
+        # We now use take along axis to get the shape (4,19600,4), then we can sum the first and the last dimension
+        corr_sums = np.sum(np.take_along_axis(corr_matrix_a, all_possible_combinations.T[..., np.newaxis], axis=0),axis=(0,2))  
+        # this returns the shape of
+        # (19600,1)
         # Afterwards we return the maximum index for the sums
         max_index = np.argmax(
-            (np.expand_dims(one_hot, axis=2) * np.expand_dims(df_subset, axis=0) * np.expand_dims(one_hot, axis=1)).sum(
-                axis=(1, 2)))
+            corr_sums)
         # Finally convert the index to the list of stocks and return the column names
         return [target_stock] + df_subset.columns[list(all_possible_combinations[max_index])].tolist()
 
