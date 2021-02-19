@@ -1,7 +1,6 @@
-tensorflow
 numpy
 requests
 pandas
 seaborn
 yfinance
-scipy
+scipy   
