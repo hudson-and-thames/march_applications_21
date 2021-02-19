@@ -1,12 +1,8 @@
 import itertools
-import tensorflow as tf
-import pandas as pd
 import numpy as np
 import scipy.special
-from statsmodels.distributions.empirical_distribution import ECDF
-from .base import SelectionBase
-import itertools
 import scipy.linalg
+from .base import SelectionBase
 
 
 class ExtremalSelection(SelectionBase):
@@ -15,22 +11,24 @@ class ExtremalSelection(SelectionBase):
     Mangold 2015
     :return: (pd.DataFrame)
     """
-    def indepence_test(self, rank_df):
-        raise "Not implemented"
-        n,d = rank_df.shape
-        permut_mat = np.array(list(itertools.product([-1, 1], repeat=d)), dtype=np.int8)
-        sub_mat = permut_mat@permut_mat.T
-        F=(d+sub_mat)/2
-        D=(d-sub_mat)/2
-        cov_mat = ((2/15)**F)*((1/30)**D)
-        cov_mat_inv = scipy.linalg.inv(cov_mat)
-        rank_df_norm = rank_df.values / (n+1)
-        pos_rank_df = (rank_df_norm-1)*(3*rank_df_norm-1)
-        neg_rank_df = rank_df_norm*(2-3*rank_df_norm)
-        prodsum = np.expand_dims(pos_rank_df, axis=0) * np.expand_dims(permut_mat > 0, axis=1) + np.expand_dims(neg_rank_df, axis=0)*np.expand_dims(permut_mat < 0, axis=1)
-        T = prodsum.prod(-1).mean(-1).reshape((-1, 1))
-        return (T.T@cov_mat_inv@T)[0][0]*n
 
+    @staticmethod
+    def indepence_test(rank_df):
+        raise "Not implemented"
+        n, d = rank_df.shape
+        permut_mat = np.array(list(itertools.product([-1, 1], repeat=d)), dtype=np.int8)
+        sub_mat = permut_mat @ permut_mat.T
+        F = (d + sub_mat) / 2
+        D = (d - sub_mat) / 2
+        cov_mat = ((2 / 15) ** F) * ((1 / 30) ** D)
+        cov_mat_inv = scipy.linalg.inv(cov_mat)
+        rank_df_norm = rank_df.values / (n + 1)
+        pos_rank_df = (rank_df_norm - 1) * (3 * rank_df_norm - 1)
+        neg_rank_df = rank_df_norm * (2 - 3 * rank_df_norm)
+        prodsum = np.expand_dims(pos_rank_df, axis=0) * np.expand_dims(permut_mat > 0, axis=1) + np.expand_dims(
+            neg_rank_df, axis=0) * np.expand_dims(permut_mat < 0, axis=1)
+        T = prodsum.prod(-1).mean(-1).reshape((-1, 1))
+        return (T.T @ cov_mat_inv @ T)[0][0] * n
 
     def _find_partners_for_target_stock(self, group):
         """
@@ -51,23 +49,23 @@ class ExtremalSelection(SelectionBase):
         combinations_quadruples = np.array(list((0,) + comb for comb in partner_combinations))
         # We can now use our list of possible quadruples as an index
         df_all_quadruples = df_subset.values[:, combinations_quadruples]
-        n, _, d =  df_all_quadruples.shape
+        n, _, d = df_all_quadruples.shape
         permut_mat = np.array(list(itertools.product([-1, 1], repeat=d)), dtype=np.int8)
-        sub_mat = permut_mat@permut_mat.T
-        F=(d+sub_mat)/2
-        D=(d-sub_mat)/2
-        cov_mat = ((2/15)**F)*((1/30)**D)
+        sub_mat = permut_mat @ permut_mat.T
+        F = (d + sub_mat) / 2
+        D = (d - sub_mat) / 2
+        cov_mat = ((2 / 15) ** F) * ((1 / 30) ** D)
         cov_mat_inv = scipy.linalg.inv(cov_mat)
-        rank_df_norm = df_all_quadruples / (n+1)
-        pos_rank_df = (rank_df_norm-1)*(3*rank_df_norm-1)
-        neg_rank_df = rank_df_norm*(2-3*rank_df_norm)
+        rank_df_norm = df_all_quadruples / (n + 1)
+        pos_rank_df = (rank_df_norm - 1) * (3 * rank_df_norm - 1)
+        neg_rank_df = rank_df_norm * (2 - 3 * rank_df_norm)
         # Incomplete needs to be fixed
         prodsum = np.add(np.einsum('ijk,lmk->jmik', pos_rank_df, np.expand_dims(permut_mat > 0, axis=0)),
                          np.einsum('ijk,lmk->jmik', neg_rank_df, np.expand_dims(permut_mat < 0, axis=0)))
         T = prodsum.prod(-1).mean(-1)
         # Also incomplete
-        T = ((np.expand_dims(T, axis=1)@np.expand_dims(cov_mat_inv, axis=0))@T.T)
-        T_results = np.diag(T[:, 0, :])*n
+        T = ((np.expand_dims(T, axis=1) @ np.expand_dims(cov_mat_inv, axis=0)) @ T.T)
+        T_results = np.diag(T[:, 0, :]) * n
         max_index = np.argmax(T_results)
         partners = df_subset.columns[list(combinations_quadruples[max_index])].tolist()
         return partners

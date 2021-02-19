@@ -1,33 +1,31 @@
-from pandas.core.frame import DataFrame
-from .base import SelectionBase
-import itertools
-import tensorflow as tf
+from typing import List
 import pandas as pd
 import numpy as np
-from typing import List
+import tensorflow as tf
+from .base import SelectionBase
 
 
 class TraditionalSelection(SelectionBase):
     """
     This class implements the traditional approach for partner selection. Mentioned section 3.1
-    of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+    of the paper "Statistical arbitrage with vine copulas"
+    https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
-    def __init__(self) -> None:
-        self.corr_returns_top_n = None
 
     def _preprocess(self, close: pd.DataFrame) -> pd.DataFrame:
+        """
+        Helper function for preparing the data.
+        :param close: (pd.DataFrame) the closing prices
+        """
         self.close_returns = self.calculate_returns(close)
         self.ranked_correlation = self._ranked_correlation(self.close_returns)
         self.corr_returns_top_n = self._top_n_correlations(self.ranked_correlation)
 
     def _partner_selection_approach(self, group: pd.DataFrame):
         """
-        main function to return quadruples of correlated stock (spearman) method
-        :return: (pd.DataFrame)
-        """
-        """
-        internal helper function for apply in Pandas
-        :param group: (pd.DataFrame) this the result of .groupBy...
+        Find the partners stocks for the groupby group of the data df.groupby("TARGET_STOCK").apply(...)
+        :param: group (pd.group) The group of n most correlated stocks
+        :return: (List[str]) returns a list of highest correlated quadruple
         """
         target_stock = group.name
         potential_partners = group.STOCK_PAIR.tolist()
@@ -53,6 +51,20 @@ class TraditionalSelection(SelectionBase):
         # (19600,51,1) * (1,51,51) * (19600,1,51)
         # and then take the sum
         # Afterwards we return the maximum index for the sums
-        max_index = np.argmax((np.expand_dims(one_hot, axis=2) * np.expand_dims(df_subset, axis=0) * np.expand_dims(one_hot, axis=1)).sum(axis=(1, 2)))
+        max_index = np.argmax(
+            (np.expand_dims(one_hot, axis=2) * np.expand_dims(df_subset, axis=0) * np.expand_dims(one_hot, axis=1)).sum(
+                axis=(1, 2)))
         # Finally convert the index to the list of stocks and return the column names
         return [target_stock] + df_subset.columns[list(all_possible_combinations[max_index])].tolist()
+
+    def find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
+        """
+        Find partners based on the traditional apprach mentioned in section 3.1.
+        Returns quadruples of highest scoring sum of correlated stock (spearman) method 
+        of the paper "Statistical arbitrage with vine copulas"
+        https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+        :param: close (pd.DataFrame) The close prices of the SP500
+        :param: target_stocks (List[str]) A list of target stocks to analyze
+        :return: (List[str]) returns a list of highest correlated quadruple
+        """
+        return self._find_partners(close, target_stocks)

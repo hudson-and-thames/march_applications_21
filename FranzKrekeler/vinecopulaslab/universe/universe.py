@@ -4,7 +4,6 @@ Fetch historical stock data from Yahoo Finance
 from __future__ import print_function
 from typing import List
 import yfinance as yf
-import pickle
 import requests
 import pandas as pd
 
@@ -16,6 +15,7 @@ class UniverseDownloader:
     The class UniverseDownloader fetches a part of the SP500 symbols and
     returns the historic closing prices.
     """
+
     def __init__(self, cache=False, cachepath="./tmp"):
         """
         :param cache: (bool) Cache downloaded data as pickle (False by default)
@@ -23,7 +23,7 @@ class UniverseDownloader:
         """
         self.cache = cache
         self.cachepath = cachepath
-    
+
     @staticmethod
     def fetch_sp500symbols() -> List[str]:
         """

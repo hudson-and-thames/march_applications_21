@@ -3,3 +3,5 @@ numpy
 requests
 pandas
 seaborn
+yfinance
+scipy

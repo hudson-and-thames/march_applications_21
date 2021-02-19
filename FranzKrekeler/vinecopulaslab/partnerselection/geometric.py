@@ -1,21 +1,21 @@
-from .base import SelectionBase
-import itertools
-import tensorflow as tf
-import pandas as pd
-import numpy as np
 from typing import List
+import numpy as np
+import pandas as pd
+from .base import SelectionBase
 
 
 class GeometricSelection(SelectionBase):
     """
     This class implements the geometric approach for partner selection. Mentioned section 3.1
-    of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+    of the paper "Statistical arbitrage with vine copulas"
+    https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
+
     def _partner_selection_approach(self, group):
         """
-        Helper function for df.groupby("TARTGET_STOCK").apply(...)
-         :param group: (group) The group of 50 most correlated stocks
-        :return: (List[str]) returns a list of highest scored quadruple
+        Find the partners stocks for the groupby group of the data df.groupby("TARGET_STOCK").apply(...)
+        :param: group (pd.group) The group of n most correlated stocks
+        :return: (List[str]) returns a list of highest correlated quadruple
         """
         target_stock = group.name
         partner_stocks = group.STOCK_PAIR.tolist()
@@ -29,13 +29,13 @@ class GeometricSelection(SelectionBase):
         # we use lodash because we don't need the 19600 dimension
         n, _, d = quadruples_combinations_data.shape
         # Now we will create a diagonal for our distance calculation.
-        # Please reffer to the paper
+        # Please refer to the paper
         line = np.ones(d)
-        # Einsum is great for specifing which angle to mulitply
+        # Einsum is great for specifying which dimension to multiply together
         # this extends the distance method for all 19600 combinations
-        pp = (np.einsum("ijk,k->ji", quadruples_combinations_data, line)/np.linalg.norm(line))
+        pp = (np.einsum("ijk,k->ji", quadruples_combinations_data, line) / np.linalg.norm(line))
         pn = np.sqrt(np.einsum('ijk,ijk->ji', quadruples_combinations_data, quadruples_combinations_data))
-        distance_scores = np.sqrt(pn**2 - pp**2).sum(axis=1)
+        distance_scores = np.sqrt(pn ** 2 - pp ** 2).sum(axis=1)
         min_index = np.argmin(distance_scores)
         partners = data_subset.columns[list(combinations_quadruples[min_index])].tolist()
         return partners
@@ -48,17 +48,27 @@ class GeometricSelection(SelectionBase):
         :param pts: the points to measure the distance to the line
         :return: float np.array with distances
         """
-        dp = np.dot(pts,line)
-        pp = dp/np.linalg.norm(line)
+        dp = np.dot(pts, line)
+        pp = dp / np.linalg.norm(line)
         pn = np.linalg.norm(pts, axis=1)
-        return np.sqrt(pn**2 - pp**2)
-
+        return np.sqrt(pn ** 2 - pp ** 2)
 
     def _preprocess(self, close: pd.DataFrame) -> pd.DataFrame:
+        """
+        Helper function for preparing the data.
+        :param close: (pd.DataFrame) the closing prices
+        """
         self.close_returns = self.calculate_returns(close)
         self.ranked_correlation = self._ranked_correlation(self.close_returns)
         self.corr_returns_top_n = self._top_n_correlations(self.ranked_correlation)
         self.ranked_returns_pct = self._rankings_pct(self.close_returns)
 
-
-
+    def find_partners(self, close: pd.DataFrame, target_stocks: List[str] = []):
+        """
+        Find partners based on the geometric mentioned in section 3.1
+        of the paper "Statistical arbitrage with vine copulas" https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+        :param: close (pd.DataFrame) The close prices of the SP500
+        :param: target_stocks (List[str]) A list of target stocks to analyze
+        :return: (List[str]) returns a list of highest correlated quadruple
+        """
+        return self._find_partners(close, target_stocks)
