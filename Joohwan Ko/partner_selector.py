@@ -14,7 +14,8 @@ from statsmodels.distributions.empirical_distribution import ECDF
 
 class SelectPartner:
     """
-    Class that handles 4 different ways of selecting partner at Initialization Period
+    Implementation for section 3.1.1: Partner selection from the paper "Statistical arbitrage with vine copulas(2016,Stübinger)
+    and this handles 4 different ways of selecting partner at Initialization Period
     1. Traditional Approach
     2. Extended Approach
     3. Geometric Approach
