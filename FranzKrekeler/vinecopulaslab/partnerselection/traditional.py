@@ -20,6 +20,7 @@ class TraditionalSelection(SelectionBase):
         Helper function for preparing the data.
         :param close: (pd.DataFrame) the closing prices
         """
+        close.sort_index(axis=1, inplace=True)
         self.close_returns = self.calculate_returns(close)
         self.ranked_correlation = self._ranked_correlation(self.close_returns)
         self.corr_returns_top_n = self._top_n_correlations(self.ranked_correlation)
