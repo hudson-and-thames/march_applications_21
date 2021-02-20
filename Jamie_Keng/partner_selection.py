@@ -32,9 +32,7 @@ class PairSelection:
     def __potential_quadruples(partner_dict):
         """Form quadruples out of the potential partner stocks pool.
 
-        Parameters:
-        ----------
-        partner_dict -- potential partner stocks for each stock in the dataset.
+        :param partner_dict: (pandas series): potential partner stocks for each stock in the dataset.
         """
         # Potential quadruples formation
         pairs_dict = {}
@@ -62,9 +60,7 @@ class PairSelection:
     def __euclidean_distance(quadruple_point):
         """Calculate the Euclidean distance.
 
-        Parameters:
-        ----------
-        quadruple -- points representing ranks of quadruples.
+        :param quadruple: (np.array): points representing ranks of quadruples.
         """
         distance = np.linalg.norm(quadruple_point -
                                   quadruple_point @ np.array([1, 1, 1, 1]) / 4 * np.array([1, 1, 1, 1]))
@@ -76,9 +72,7 @@ class PairSelection:
         """Select the final quadruple when users choose the traditional approach, the extended approach,
            the extremal approach.
 
-        Parameters:
-        ----------
-        quadruple_dict -- quadruple candidates
+        :param quadruple_dict: (dict): quadruple candidates
         """
         result_pair_dict = {}
         for pair in quadruple_dict:
@@ -92,9 +86,7 @@ class PairSelection:
     def __geometric_final_quadruple(quadruple_dict):
         """Select the final quadruple when the geometric approach is in use.
 
-        Parameters:
-        ----------
-        quadruple_dict -- quadruple candidates
+        :param quadruple_dict: (dict): quadruple candidates
         """
         result_pair_dict = {}
         for pair in quadruple_dict:
