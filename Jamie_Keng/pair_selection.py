@@ -10,10 +10,6 @@ class PairSelection:
         self.partner_num = partner_num
         self.length = (len(self.return_df) + 1)
         self.rank_df = self.return_df.rank() / self.length
-        self.result_trad = 0.0
-        self.result_extend = 0.0
-        self.result_geom = 0.0
-        self.result_extremal = 0.0
 
     def __partner_selection(self):
         """ Generate potential partner stocks."""
