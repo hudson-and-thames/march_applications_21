@@ -1,24 +1,20 @@
-import pandas as pd
-import numpy as np
-
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 from itertools import combinations
-
-from statsmodels.distributions.empirical_distribution import ECDF
-
 from math import comb
-
+from statsmodels.distributions.empirical_distribution import ECDF
 from tqdm import tqdm
 
 
 class PartnerSelector:
     """
     Implementation of the Partner Selection Framework.
-    Hudson and Thames Skilling Challenge, March 2021.
+    This class performs automated data preperation and provides partner selection methods.
     Traditional Approach, extended approach and geometric approach are implemented.
 
-    https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
+    Statistical arbitrage with vine copulas - https://www.econstor.eu/bitstream/10419/147450/1/870932616.pdf
     """
 
     def __init__(self, price_data: pd.DataFrame, target_ticker: str, no_of_partners: int = 3, top_n_corr: int = 50):
@@ -42,7 +38,7 @@ class PartnerSelector:
         self.no_of_partners = no_of_partners
         self.top_n_corr = top_n_corr
         self.partner_data = None
-        self.best_Q = None
+        self.best_q = None
         self._prepare_data()
 
     def select(self, method: str, estimator: int = 1) -> list:
@@ -61,18 +57,18 @@ class PartnerSelector:
 
         method = method.lower()
         if method == 'traditional':
-            best_Q = self._traditional_method()
+            best_q = self._traditional_method()
 
         elif method == 'extended':
-            best_Q = self._extended_method(estimator)
+            best_q = self._extended_method(estimator)
 
         elif method == 'geometric':
-            best_Q = self._geometric_method()
+            best_q = self._geometric_method()
 
         else:
             raise Exception("Unknown method. Either 'traditional' , 'extended' or 'geometric'.")
 
-        return best_Q
+        return best_q
 
     def _traditional_method(self) -> list:
         """
@@ -100,7 +96,7 @@ class PartnerSelector:
 
             if sum_of_pairwise_corr > highest_corr:
                 highest_corr = sum_of_pairwise_corr
-                best_Q = partners
+                best_q = partners
 
             partner_data[i] = {
                 'Grouping': partners,
@@ -108,8 +104,8 @@ class PartnerSelector:
             }
 
         self.partner_data = partner_data
-        self.best_Q = best_Q
-        return best_Q
+        self.best_q = best_q
+        return best_q
 
     def _upper_tri_sum(self,corr_matrix):
         """
@@ -123,8 +119,8 @@ class PartnerSelector:
         :return: Sum of upper triangular, less the diagonal.
         :rtype: float
         """
-        m = corr_matrix.shape[0]
-        r = np.arange(m)
+        number_of_rows = corr_matrix.shape[0]
+        r = np.arange(number_of_rows)
         mask = r[:,None] < r
 
         return np.sum(corr_matrix[mask])
@@ -151,15 +147,15 @@ class PartnerSelector:
         self.__h_d = h_d
 
         if estimator == 1:
-            best_Q = self._extended_method_estimator_1()
+            best_q = self._extended_method_estimator_1()
         elif estimator == 2:
-            best_Q = self._extended_method_estimator_2()
+            best_q = self._extended_method_estimator_2()
         elif estimator == 3:
-            best_Q = self._extended_method_estimator_3()
+            best_q = self._extended_method_estimator_3()
         else:
             raise Exception('Invalid estimator provided. See documentation for estimator 1, 2 and 3.')
 
-        return best_Q
+        return best_q
 
     def _extended_method_estimator_1(self) -> list:
         """
@@ -198,7 +194,7 @@ class PartnerSelector:
             
             if curr_p_1 > highest_p_1:
                 highest_p_1 = curr_p_1
-                best_Q = partners
+                best_q = partners
 
             partner_data[i] = {
                     'Grouping': partners,
@@ -206,9 +202,9 @@ class PartnerSelector:
                 }
 
         self.partner_data = partner_data
-        self.best_Q = best_Q
+        self.best_q = best_q
 
-        return best_Q
+        return best_q
 
     def _extended_method_estimator_2(self) -> list:
         """
@@ -243,7 +239,7 @@ class PartnerSelector:
 
             if curr_p_2 > highest_p_2:
                 highest_p_2 = curr_p_2
-                best_Q = partners
+                best_q = partners
 
             partner_data[i] = {
                 'Grouping': partners,
@@ -251,9 +247,9 @@ class PartnerSelector:
             }
 
         self.partner_data = partner_data
-        self.best_Q = best_Q
+        self.best_q = best_q
 
-        return best_Q
+        return best_q
 
     def _extended_method_estimator_3(self) -> list:
         """
@@ -294,7 +290,7 @@ class PartnerSelector:
 
             if curr_p_3 > highest_p_3:
                 highest_p_3 = curr_p_3
-                best_Q = partners
+                best_q = partners
 
             partner_data[i] = {
                 'Grouping': partners,
@@ -302,9 +298,9 @@ class PartnerSelector:
             }
 
         self.partner_data = partner_data
-        self.best_Q = best_Q
+        self.best_q = best_q
 
-        return best_Q
+        return best_q
 
     def _geometric_method(self) -> list:
         """
@@ -336,7 +332,7 @@ class PartnerSelector:
 
             if total_euclidean_distance < lowest_euclidean_distance:
                 lowest_euclidean_distance = total_euclidean_distance
-                best_Q = partners
+                best_q = partners
 
             partner_data[i] = {
                 'Grouping': partners,
@@ -344,9 +340,9 @@ class PartnerSelector:
             }
 
         self.partner_data = partner_data
-        self.best_Q = best_Q
+        self.best_q = best_q
 
-        return best_Q
+        return best_q
 
     def _diagonal_distance(self, vector: np.ndarray):
         """
@@ -397,14 +393,14 @@ class PartnerSelector:
 
         :raises Exception: If selection has not been done, error will be raised.
         """
-        if self.best_Q is None:
+        if self.best_q is None:
             raise Exception("The best parters have not been identified yet. Please run select() before this method.")
 
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(15, 5))
 
-        for security in self.best_Q:
-            rets = np.log(self.price_data[security]).pct_change()
-            rets = np.cumprod(1+rets)
+        for security in self.best_q:
+            rets = np.log(self.price_data[security]).diff()
+            rets = np.cumsum(rets)
             ax.plot(rets, label=security)
         plt.title('Log Prices of Best Partners')
         plt.legend(loc=0)
