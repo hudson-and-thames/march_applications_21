@@ -43,9 +43,10 @@ class ExtendedSelection(SelectionBase):
         # For reference:
         # https://github.com/hudson-and-thames/march_applications_21/blob/main/Guide%20for%20the%20Extended%20Approach.pdf
         hd = (d + 1) / (2 ** d - d - 1)
-        ecdf_df_product = np.product(quadruples_combinations_data, axis=-1)
-        est1 = hd * (-1 + (2 ** d / n) * (1 - ecdf_df_product).sum(axis=0))
-        est2 = hd * (-1 + (2 ** d / n) * ecdf_df_product.sum(axis=0))
+        ecdf_df_product_1 = np.product(1-quadruples_combinations_data, axis=-1)
+        ecdf_df_product_2 = np.product(quadruples_combinations_data, axis=-1)
+        est1 = hd * (-1 + (2 ** d / n) * ecdf_df_product_1.sum(axis=0))
+        est2 = hd * (-1 + (2 ** d / n) * ecdf_df_product_2.sum(axis=0))
         # here we create the index as we will use it on specific dimensions
         idx = np.array([(k, l) for l in range(0, d) for k in range(0, l)])
         est3 = -3 + (12 / (n * scipy.special.comb(n, 2, exact=True))) * (
