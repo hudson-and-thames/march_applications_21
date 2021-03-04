@@ -51,7 +51,7 @@ class ExtendedSelection(SelectionBase):
         idx = np.array([(k, l) for l in range(0, d) for k in range(0, l)])
         est3 = -3 + (12 / (n * scipy.special.comb(n, 2, exact=True))) * (
                 (1 - quadruples_combinations_data[:, :, idx[:, 0]]) * (
-                1 - quadruples_combinations_data[:, :, idx[:, 1]])).sum(axis=(0, 2))
+                1 - quadruples_combinations_data[:, :, idx[:, 1]])).sum(axis=(1, 2))
         quadruples_scores = (est1 + est2 + est3) / 3
         # The quadruple scores have the shape of (19600,1) now
         max_index = np.argmax(quadruples_scores)
