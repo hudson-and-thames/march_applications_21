@@ -48,7 +48,7 @@ The one consistent theme between all of our top researchers is their ability to 
 ## Institutional - Need to Know
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/hudson-and-thames/mlfinlab/master/docs/source/logo/Hudson%20%26%20Thames_verticalblack.png" height="150"><br>
+  <img src="https://hudsonthames.org/wp-content/uploads/2021/01/logo-black-horisontal.png" height="150"><br>
 </div>
 
 **Our Mission**
